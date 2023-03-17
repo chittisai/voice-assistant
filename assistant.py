@@ -14,35 +14,39 @@ def talk(text):
     engine.say(text)
     engine.runAndWait()
 
-#listening
-with sr.Microphone() as source:
-    talk('i am listening')
-    print('listening....')
-    voice = listener.listen(source)
-    command = listener.recognize_google(voice)
-    print('\t you: ' + command)
 
-# running assistant
-if 'song' in command:
-    song = command.replace('song', '')
+def main():
+    with sr.Microphone() as source:
+        talk('i am listening')
+        print('listening....')
+        voice = listener.listen(source)
+        command = listener.recognize_google(voice)
+        print('\t you: ' + command)
 
-if 'play' in command:
-    song = command.replace('play', '')
-    print('🎶' + song)
-    talk('playing' + song)
-    pywhatkit.playonyt(song)
+    # running assistant
+    if 'song' in command:
+        song = command.replace('song', '')
 
-elif 'time' in command:
-    time = datetime.datetime.now().strftime('%I:%M %p')
-    print('current time is ' + time)
-    talk('current time is ' + time)
+    if 'play' in command:
+        song = command.replace('play', '')
+        print('🎶' + song)
+        talk('playing' + song)
+        pywhatkit.playonyt(song)
 
-elif 'who is' or 'who are' or 'what is' or 'what are' in command:
-    incmnd = command.replace('who is' or 'what are' or 'who are' or 'what is', '')
-    info = wiki.summary(incmnd, 1)
-    print(info)
-    talk(info)
+    elif 'time' in command:
+        time = datetime.datetime.now().strftime('%I:%M %p')
+        print('current time is ' + time)
+        talk('current time is ' + time)
+        
+    elif 'hello' in command:
+        print('hello! how can I help you?')
+        talk('hello! how can I help you?')
+        main()
 
-elif 'hello' in command:
-    print('hello! how can I help you? \n\t\t you should run the code again to give command')
-    talk('hello! how can I help you?')
+    elif 'who is' or 'who are' or 'what is' or 'what are' in command:
+        incmnd = command.replace('who is' or 'what are' or 'who are' or 'what is', '')
+        info = wiki.summary(incmnd, 1)
+        print(info)
+        talk(info)
+    main()
+main()
